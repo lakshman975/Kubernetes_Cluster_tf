@@ -1,0 +1,42 @@
+01-vpc
+terraform apply -auto-approve
+
+02
+terraform apply -auto-approve
+
+03
+terraform apply -auto-approve
+
+04
+terraform apply -auto-approve
+
+
+
+1. Login to the work station and do aws configure
+
+2.To upgrade the cluster
+aws eks update-kubeconfig --region us-east-1 --name roboshop-tf
+
+3.upgrade
+## Comment green and and deploy blue
+## Run some pods on blue
+## Uncomment green and run terraform apply
+## Taint green(new) nodes
+## kubectl taint nodes <NameOfTheNode> project=roboshop:NoExecute
+## Upgrade the EKS manually in aws console. select 1.28 
+## Once it is updated then worker nodes will also ask to upgrade don't upgrade the blue workernodes upgrade the green workernodes
+## Taint blue nodes using below command because new pods shouldn't run on blue nodes
+## kubectl taint nodes <NameOfTheNode> project=roboshop:NoSchedule
+## Untain green
+## kubectl taint nodes <NameOfTheNode> project=roboshop:NoExecute-
+## cordon/drain the blue nodes so the pods inside the blue nodes will run on green nodes.
+## kubectl drain --ignore-daemonsets <node_name> --force --delete-emptydir-data
+## The same way we have upgrade to 1.29
+
+
+
+
+To destroy all the resources from 04-eksctl folder to 01-vpc
+for i in `ls -dr */` ; do cd $i ; terraform destroy -auto-approve ; cd .. ; done
+
+ls -dr */  - this command will list the directories in reverse order.
